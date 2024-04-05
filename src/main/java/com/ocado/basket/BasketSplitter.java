@@ -9,7 +9,7 @@ public class BasketSplitter {
     private final Map<String, List<String>> deliveryOptions;
 
     public BasketSplitter(String absolutePathToConfigFile) {
-        AbstractConfigLoader loader = new ConfigLoader();
+        var loader = new ConfigLoader();
         this.deliveryOptions =  loader.loadDeliveryOptions(absolutePathToConfigFile);
     }
 
@@ -19,6 +19,9 @@ public class BasketSplitter {
         var splitDeliveries = new HashMap<String, List<String>>();
         while(!itemSet.isEmpty()){
             Map<String, Long> deliveryCounts = countDeliveryOptions(itemSet);
+            if (deliveryCounts.isEmpty()) {
+                throw new IllegalArgumentException("Item(s) without delivery option found: "+ itemSet + ". Please check the configuration file.");
+            }
             Map.Entry<String, Long> maxDeliveryOptionEntry = getMaxDeliveryOption(deliveryCounts);
             String maxDeliveryOption = maxDeliveryOptionEntry.getKey();
             List<String> itemsWithMaxDeliveryOption = getItemsWithMaxDeliveryOption(itemSet, maxDeliveryOption);
@@ -41,6 +44,7 @@ public class BasketSplitter {
 
     private List<String> getItemsWithMaxDeliveryOption(Set<String> itemSet, String maxDeliveryOption) {
         return itemSet.stream()
+                .filter(deliveryOptions::containsKey)
                 .filter(item -> deliveryOptions.get(item).contains(maxDeliveryOption))
                 .toList();
     }
@@ -52,6 +56,9 @@ public class BasketSplitter {
                         deliveryOption -> {
                             if (deliveryCounts.containsKey(deliveryOption)) {
                                 deliveryCounts.put(deliveryOption, deliveryCounts.get(deliveryOption) - 1);
+                                if (deliveryCounts.get(deliveryOption) == 0) {
+                                    deliveryCounts.remove(deliveryOption);
+                                }
                             }
                         }));
     }

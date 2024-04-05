@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BasketSplitterTest {
 
@@ -61,11 +62,9 @@ class BasketSplitterTest {
     }
 
     @Test
-    void splitShouldHandleItemsWithNoDeliveryOptions() {
-        List<String> items = List.of("itemWithoutDeliveryOption");
+    void splitShouldThrowExceptionWhenItemWithoutDeliveryOptionsProvided() {
+        List<String> items = Arrays.asList("item1", "itemWithoutDeliveryOption");
 
-        Map<String, List<String>> actual = basketSplitter.split(items);
-
-        assertEquals(Map.of(), actual);
+        assertThrows(IllegalArgumentException.class, () -> basketSplitter.split(items));
     }
 }
