@@ -7,13 +7,10 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BasketSplitterTest {
 
@@ -66,5 +63,44 @@ class BasketSplitterTest {
         List<String> items = Arrays.asList("item1", "itemWithoutDeliveryOption");
 
         assertThrows(IllegalArgumentException.class, () -> basketSplitter.split(items));
+    }
+
+    @Test
+    void splitShouldHandleLargeInputAndConfigWithRandomDeliveryOptions() {
+        // Generate large config
+        var tempFile = tempDir.resolve("large_config.json");
+        try (var writer = new PrintWriter(tempFile.toFile())) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("{");
+            for (int i = 0; i < 1000; i++) {
+                sb.append("\"item").append(i).append("\": [");
+                List<String> deliveryOptions = new ArrayList<>();
+                for (int j = 0; j < 10; j++) {
+                    deliveryOptions.add("\"deliveryOption" + j + "\"");
+                }
+                Collections.shuffle(deliveryOptions);
+                List<String> selectedDeliveryOptions = deliveryOptions.subList(0, new Random().nextInt(6) + 5);
+                sb.append(String.join(", ", selectedDeliveryOptions));
+                sb.append("]");
+                if (i != 999) {
+                    sb.append(", ");
+                }
+            }
+            sb.append("}");
+            writer.println(sb);
+        } catch (IOException e) {
+            fail("Failed to create large config file", e);
+        }
+
+        basketSplitter = new BasketSplitter(tempFile.toString());
+
+        // Generate large input list
+        List<String> items = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            items.add("item" + i);
+        }
+
+        // Execute and assert no exceptions are thrown
+        assertDoesNotThrow(() -> basketSplitter.split(items));
     }
 }
