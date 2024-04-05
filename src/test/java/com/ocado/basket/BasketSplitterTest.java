@@ -1,5 +1,6 @@
 package com.ocado.basket;
 
+import com.ocado.basket.exceptions.InvalidItemException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -32,7 +33,7 @@ class BasketSplitterTest {
 
 
     @Test
-    void splitShouldReturnCorrectDeliveryOptionsForGivenItems() {
+    void split_returnsCorrectDeliveryOptions_forGivenItems() {
         List<String> items = Arrays.asList("item1", "item2", "item3");
         Map<String, List<String>> expected = Map.of(
                 "deliveryOption1", List.of("item1", "item2"),
@@ -50,7 +51,7 @@ class BasketSplitterTest {
     }
 
     @Test
-    void splitShouldReturnEmptyMapWhenNoItemsProvided() {
+    void split_returnsEmptyMap_whenNoItemsProvided() {
         List<String> items = List.of();
 
         Map<String, List<String>> actual = basketSplitter.split(items);
@@ -59,14 +60,14 @@ class BasketSplitterTest {
     }
 
     @Test
-    void splitShouldThrowExceptionWhenItemWithoutDeliveryOptionsProvided() {
+    void split_throwsException_whenItemWithoutDeliveryOptionsProvided() {
         List<String> items = Arrays.asList("item1", "itemWithoutDeliveryOption");
 
-        assertThrows(IllegalArgumentException.class, () -> basketSplitter.split(items));
+        assertThrows(InvalidItemException.class, () -> basketSplitter.split(items));
     }
 
     @Test
-    void splitShouldHandleLargeInputAndConfigWithRandomDeliveryOptions() {
+    void split_handlesLargeInputAndConfigWithRandomDeliveryOptions() {
         // Generate large config
         var tempFile = tempDir.resolve("large_config.json");
         try (var writer = new PrintWriter(tempFile.toFile())) {

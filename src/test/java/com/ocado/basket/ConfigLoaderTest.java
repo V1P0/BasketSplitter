@@ -1,6 +1,6 @@
 package com.ocado.basket;
 
-import org.json.JSONObject;
+import com.ocado.basket.exceptions.ConfigLoadException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -43,7 +43,8 @@ class ConfigLoaderTest {
 
     @Test
     void loadDeliveryOptions_throwsRuntimeException_whenConfigFileDoesNotExist() {
-        assertThrows(RuntimeException.class, () -> configLoader.loadDeliveryOptions("nonexistent.json"));
+        var exception = assertThrows(ConfigLoadException.class, () -> configLoader.loadDeliveryOptions("nonexistent.json"));
+        assertEquals("Failed to load config file", exception.getMessage());
     }
 
     @Test
@@ -54,6 +55,7 @@ class ConfigLoaderTest {
             writer.println("{\"option1\": \"value1\", \"option2\": \"value2\"}");  // Invalid JSON for this use case
         }
 
-        assertThrows(RuntimeException.class, () -> configLoader.loadDeliveryOptions(tempFile.toString()));
+        var exception = assertThrows(ConfigLoadException.class, () -> configLoader.loadDeliveryOptions(tempFile.toString()));
+        assertEquals("Invalid JSON in config file", exception.getMessage());
     }
 }

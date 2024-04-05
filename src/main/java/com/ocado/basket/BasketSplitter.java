@@ -1,5 +1,7 @@
 package com.ocado.basket;
 
+import com.ocado.basket.exceptions.InvalidItemException;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -20,7 +22,7 @@ public class BasketSplitter {
         while(!itemSet.isEmpty()){
             Map<String, Long> deliveryCounts = countDeliveryOptions(itemSet);
             if (deliveryCounts.isEmpty()) {
-                throw new IllegalArgumentException("Item(s) without delivery option found: "+ itemSet + ". Please check the configuration file.");
+                throw new InvalidItemException("Item(s) without delivery option found: "+ itemSet + ". Please check the configuration file.");
             }
             Map.Entry<String, Long> maxDeliveryOptionEntry = getMaxDeliveryOption(deliveryCounts);
             String maxDeliveryOption = maxDeliveryOptionEntry.getKey();
