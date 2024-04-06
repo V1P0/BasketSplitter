@@ -1,4 +1,4 @@
-package com.ocado.basket;
+package com.ocado.basket.logic;
 
 import com.ocado.basket.exceptions.InvalidItemException;
 

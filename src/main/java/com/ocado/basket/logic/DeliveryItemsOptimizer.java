@@ -1,5 +1,6 @@
-package com.ocado.basket;
+package com.ocado.basket.logic;
 
+import com.ocado.basket.dto.DeliveryInfoDto;
 import com.ocado.basket.exceptions.InvalidItemException;
 
 import java.util.*;
@@ -19,15 +20,19 @@ public class DeliveryItemsOptimizer {
         Map<String, List<String>> splitDeliveries = new HashMap<>();
         Map<String, Long> deliveryCounts = countDeliveryOptions(remainingItems, optimalDeliveries);
         while(!deliveryCounts.isEmpty()){
-            DeliveryInfo maxDeliveryOption = computeMaxDeliveryOption(deliveryCounts, remainingItems);
+            DeliveryInfoDto maxDeliveryOption = computeMaxDeliveryOption(deliveryCounts, remainingItems);
             splitDeliveries.put(maxDeliveryOption.getDeliveryName(), maxDeliveryOption.getDeliveryItems());
             maxDeliveryOption.getDeliveryItems().forEach(remainingItems::remove);
             deliveryCounts = updateDeliveryCounts(deliveryCounts, maxDeliveryOption, optimalDeliveries);
         }
-        if(!remainingItems.isEmpty()){
-            throw new InvalidItemException("Invalid items: " + remainingItems);
-        }
+        validateRemainingItems(remainingItems);
         return splitDeliveries;
+    }
+
+    private static void validateRemainingItems(Set<String> remainingItems) {
+        if(!remainingItems.isEmpty()){
+            throw new InvalidItemException("Invalid items: " + remainingItems + " not found in delivery options");
+        }
     }
 
     public Map<String, Long> countDeliveryOptions(Set<String> itemSet, Set<String> optimalDeliveries) {
@@ -38,11 +43,11 @@ public class DeliveryItemsOptimizer {
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 
-    public DeliveryInfo computeMaxDeliveryOption(Map<String, Long> deliveryCounts, Set<String> itemSet){
+    public DeliveryInfoDto computeMaxDeliveryOption(Map<String, Long> deliveryCounts, Set<String> itemSet){
         Map.Entry<String, Long> maxDeliveryOptionEntry = getMaxDeliveryOption(deliveryCounts);
         String maxDeliveryOption = maxDeliveryOptionEntry.getKey();
         List<String> itemsWithMaxDeliveryOption = getItemsWithMaxDeliveryOption(itemSet, maxDeliveryOption);
-        return new DeliveryInfo(maxDeliveryOption, itemsWithMaxDeliveryOption);
+        return new DeliveryInfoDto(maxDeliveryOption, itemsWithMaxDeliveryOption);
     }
 
     private Map.Entry<String, Long> getMaxDeliveryOption(Map<String, Long> deliveryCounts) {
@@ -56,7 +61,7 @@ public class DeliveryItemsOptimizer {
                 .toList();
     }
 
-    public Map<String, Long> updateDeliveryCounts(Map<String, Long> deliveryCounts, DeliveryInfo maxDelivery, Set<String> optimalDeliveries) {
+    public Map<String, Long> updateDeliveryCounts(Map<String, Long> deliveryCounts, DeliveryInfoDto maxDelivery, Set<String> optimalDeliveries) {
         Map<String, Long> newDeliveryCounts = new HashMap<>(deliveryCounts);
         maxDelivery.getDeliveryItems().forEach(
                 item -> deliveryOptions.get(item).stream().filter(optimalDeliveries::contains).forEach(
