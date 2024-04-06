@@ -4,6 +4,12 @@ import com.ocado.basket.exceptions.InvalidItemException;
 
 import java.util.*;
 
+/**
+ * This class is responsible for finding the optimal delivery options for a given basket of products.
+ * It uses dynamic programming to find the optimal delivery options.
+ *
+ * @version 1.0
+ */
 public class DynamicDeliveryCountMinimizer implements AbstractDeliveryCountMinimizer {
 
     private final Map<String, List<String>> productToDeliveryOptions;

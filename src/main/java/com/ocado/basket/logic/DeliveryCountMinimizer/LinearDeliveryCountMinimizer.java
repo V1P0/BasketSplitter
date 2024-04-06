@@ -11,6 +11,13 @@ import com.ocado.basket.exceptions.NoSolutionFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class is responsible for finding the optimal delivery options for a given basket of products.
+ * It uses linear programming to find the optimal delivery options.
+ * It uses Google OR-Tools to solve the linear programming problem.
+ *
+ * @version 1.0
+ */
 public class LinearDeliveryCountMinimizer implements AbstractDeliveryCountMinimizer {
     static {
         Loader.loadNativeLibraries();

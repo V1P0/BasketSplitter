@@ -11,6 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ConfigLoader class
+ * Loads the delivery options from a config file
+ *
+ * @version 1.0
+ */
 public class ConfigLoader {
 
     public Map<String, List<String>> loadDeliveryOptions(String absolutePathToConfigFile) {
