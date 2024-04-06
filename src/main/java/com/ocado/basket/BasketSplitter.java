@@ -1,8 +1,8 @@
 package com.ocado.basket;
 
-import com.ocado.basket.logic.ConfigLoader;
-import com.ocado.basket.logic.DeliveryCountMinimizer;
-import com.ocado.basket.logic.DeliveryItemsOptimizer;
+import com.ocado.basket.logic.*;
+import com.ocado.basket.logic.DeliveryCountMinimizer.AbstractDeliveryCountMinimizer;
+import com.ocado.basket.logic.DeliveryCountMinimizer.DynamicDeliveryCountMinimizer;
 
 import java.util.List;
 import java.util.Map;
@@ -16,8 +16,8 @@ import java.util.Set;
  */
 public class BasketSplitter {
 
-    private final DeliveryItemsOptimizer optimizer;
-    private final DeliveryCountMinimizer deliveryCountMinimizer;
+    private final ItemsCountMaximizer optimizer;
+    private final AbstractDeliveryCountMinimizer deliveryCountMinimizer;
 
     /**
      * Constructor
@@ -26,9 +26,8 @@ public class BasketSplitter {
     public BasketSplitter(String absolutePathToConfigFile) {
         var loader = new ConfigLoader();
         Map<String, List<String>> productToDeliveryOptions = loader.loadDeliveryOptions(absolutePathToConfigFile);
-        optimizer = new DeliveryItemsOptimizer(productToDeliveryOptions);
-        deliveryCountMinimizer = new DeliveryCountMinimizer(productToDeliveryOptions);
-
+        optimizer = new ItemsCountMaximizer(productToDeliveryOptions);
+        deliveryCountMinimizer = new DynamicDeliveryCountMinimizer(productToDeliveryOptions);
     }
 
 

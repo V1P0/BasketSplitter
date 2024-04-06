@@ -1,7 +1,6 @@
-package com.ocado.basket;
+package com.ocado.basket.logic;
 
 import com.ocado.basket.exceptions.ConfigLoadException;
-import com.ocado.basket.logic.ConfigLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

@@ -95,13 +95,14 @@ class BasketSplitterTest {
             fail("Failed to create large config file", e);
         }
 
-        basketSplitter = new BasketSplitter(tempFile.toString());
-
         // Generate large input list
         List<String> items = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             items.add("item" + i);
         }
+
+
+        basketSplitter = new BasketSplitter(tempFile.toString());
 
         // Execute and assert no exceptions are thrown
         assertDoesNotThrow(() -> basketSplitter.split(items));

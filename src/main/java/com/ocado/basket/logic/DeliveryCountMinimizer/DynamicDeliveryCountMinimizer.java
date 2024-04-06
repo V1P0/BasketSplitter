@@ -1,14 +1,14 @@
-package com.ocado.basket.logic;
+package com.ocado.basket.logic.DeliveryCountMinimizer;
 
 import com.ocado.basket.exceptions.InvalidItemException;
 
 import java.util.*;
 
-public class DeliveryCountMinimizer {
+public class DynamicDeliveryCountMinimizer implements AbstractDeliveryCountMinimizer {
 
     private final Map<String, List<String>> productToDeliveryOptions;
 
-    public DeliveryCountMinimizer(Map<String, List<String>> productToDeliveryOptions) {
+    public DynamicDeliveryCountMinimizer(Map<String, List<String>> productToDeliveryOptions) {
         this.productToDeliveryOptions = productToDeliveryOptions;
     }
 
@@ -26,7 +26,7 @@ public class DeliveryCountMinimizer {
             return cache.get(items);
         }
 
-        Set<String> minimalDeliveryOptions = null;
+        Set<String> minimalDeliveryOptions = Set.of();
 
         for (String product : items) {
             validateProduct(product);
@@ -66,7 +66,7 @@ public class DeliveryCountMinimizer {
     }
 
     private Set<String> updateMinimalDeliveryOptions(String deliveryOption, Set<String> deliveryOptionsForRemaining, Set<String> minimalDeliveryOptions) {
-        if (minimalDeliveryOptions == null || deliveryOptionsForRemaining.size() + 1 < minimalDeliveryOptions.size()) {
+        if (minimalDeliveryOptions.isEmpty() || deliveryOptionsForRemaining.size() + 1 < minimalDeliveryOptions.size()) {
             minimalDeliveryOptions = new HashSet<>(deliveryOptionsForRemaining);
             minimalDeliveryOptions.add(deliveryOption);
         }
