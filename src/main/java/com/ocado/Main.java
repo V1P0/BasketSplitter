@@ -2,7 +2,7 @@ package com.ocado;
 
 import com.ocado.basket.BasketSplitter;
 import com.ocado.basket.logic.ConfigLoader;
-import com.ocado.basket.logic.DeliveryItemsOptimizer;
+import com.ocado.basket.logic.ItemsCountMaximizer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,14 +20,13 @@ public class Main {
             System.out.println(result);
             System.out.println(result.size());
             startTime = System.currentTimeMillis();
-            DeliveryItemsOptimizer optimizer = new DeliveryItemsOptimizer(new ConfigLoader().loadDeliveryOptions(path));
+            ItemsCountMaximizer optimizer = new ItemsCountMaximizer(new ConfigLoader().loadDeliveryOptions(path));
             result = optimizer.optimizeDeliveryItems(itemList, new HashSet<>(){
                 @Override
                 public boolean contains(Object key) {
                     return true;
                 }
             });
-            //remove the empty deliveries
             result.values().removeIf(List::isEmpty);
             System.out.println(System.currentTimeMillis() - startTime);
             System.out.println(result);

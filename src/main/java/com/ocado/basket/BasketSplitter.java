@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class BasketSplitter {
 
-    private final DeliveryItemsOptimizer optimizer;
+    private final ItemsCountMaximizer optimizer;
     private final AbstractDeliveryCountMinimizer deliveryCountMinimizer;
 
     /**
@@ -26,9 +26,8 @@ public class BasketSplitter {
     public BasketSplitter(String absolutePathToConfigFile) {
         var loader = new ConfigLoader();
         Map<String, List<String>> productToDeliveryOptions = loader.loadDeliveryOptions(absolutePathToConfigFile);
-        optimizer = new DeliveryItemsOptimizer(productToDeliveryOptions);
+        optimizer = new ItemsCountMaximizer(productToDeliveryOptions);
         deliveryCountMinimizer = new DynamicDeliveryCountMinimizer(productToDeliveryOptions);
-
     }
 
 
