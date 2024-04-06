@@ -1,6 +1,6 @@
 # BasketSplitter
 
-This is a simple tool to split a basket of items delivery options that minimizes the number of deliveries while also maximizing the number of items in the biggest delivery.
+This is a simple tool to split a basket of items into delivery options that minimizes the number of deliveries while also maximizing the number of items in the biggest delivery.
 
 # Algorithm
 The algorithm consists of two main steps:
