@@ -1,4 +1,4 @@
-package com.ocado.basket.logic.minimzer;
+package com.ocado.basket.logic.DeliveryCountMinimizer;
 
 import com.google.ortools.Loader;
 import com.google.ortools.linearsolver.MPConstraint;

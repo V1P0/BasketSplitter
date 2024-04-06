@@ -1,4 +1,4 @@
-package com.ocado.basket.logic.minimzer;
+package com.ocado.basket.logic.DeliveryCountMinimizer;
 
 import com.ocado.basket.exceptions.InvalidItemException;
 

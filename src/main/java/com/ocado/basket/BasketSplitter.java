@@ -1,8 +1,8 @@
 package com.ocado.basket;
 
 import com.ocado.basket.logic.*;
-import com.ocado.basket.logic.minimzer.AbstractDeliveryCountMinimizer;
-import com.ocado.basket.logic.minimzer.DynamicDeliveryCountMinimizer;
+import com.ocado.basket.logic.DeliveryCountMinimizer.AbstractDeliveryCountMinimizer;
+import com.ocado.basket.logic.DeliveryCountMinimizer.DynamicDeliveryCountMinimizer;
 
 import java.util.List;
 import java.util.Map;
