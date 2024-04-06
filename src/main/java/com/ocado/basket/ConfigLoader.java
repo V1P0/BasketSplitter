@@ -14,7 +14,7 @@ import java.util.Map;
 public class ConfigLoader {
 
     public Map<String, List<String>> loadDeliveryOptions(String absolutePathToConfigFile) {
-        var deliveryOptions = new HashMap<String, List<String>>();
+        Map<String, List<String>> deliveryOptions = new HashMap<>();
         try(var reader = new FileReader(absolutePathToConfigFile)) {
             var config = new JSONObject(new JSONTokener(reader));
             config.keys().forEachRemaining(key-> deliveryOptions.put(key, config.getJSONArray(key).toList().stream().map(Object::toString).toList()));

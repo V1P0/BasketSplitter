@@ -25,7 +25,7 @@ class BasketSplitterTest {
         // Create a temporary config file
         var tempFile = tempDir.resolve("config.json");
         try (var writer = new PrintWriter(tempFile.toFile())) {
-            writer.println("{\"item1\": [\"deliveryOption1\", \"deliveryOption2\"], \"item2\": [\"deliveryOption1\"], \"item3\": [\"deliveryOption2\"]}");
+            writer.println("{\"item1\": [\"deliveryOption1\", \"deliveryOption2\"], \"item2\": [\"deliveryOption1\", \"deliveryOption2\"], \"item3\": [\"deliveryOption1\", \"deliveryOption3\"], \"item4\": [\"deliveryOption1\", \"deliveryOption3\"], \"item5\": [\"deliveryOption3\"], \"item6\": [\"deliveryOption2\"]}");
         }
 
         basketSplitter = new BasketSplitter(tempFile.toString());
@@ -34,13 +34,15 @@ class BasketSplitterTest {
 
     @Test
     void split_returnsCorrectDeliveryOptions_forGivenItems() {
-        List<String> items = Arrays.asList("item1", "item2", "item3");
+        List<String> items = Arrays.asList("item1", "item2", "item3", "item4", "item5", "item6");
         Map<String, List<String>> expected = Map.of(
-                "deliveryOption1", List.of("item1", "item2"),
-                "deliveryOption2", List.of("item3")
+                "deliveryOption2", List.of("item1", "item2", "item6"),
+                "deliveryOption3", List.of("item3", "item4", "item5")
         );
 
-        Map<String, List<String>> actual = basketSplitter.split(items);
+        var actual = basketSplitter.split(items);
+
+        assertEquals(expected.size(), actual.size());
 
         for (Map.Entry<String, List<String>> entry : expected.entrySet()) {
             String key = entry.getKey();
@@ -103,5 +105,20 @@ class BasketSplitterTest {
 
         // Execute and assert no exceptions are thrown
         assertDoesNotThrow(() -> basketSplitter.split(items));
+    }
+
+    @Test
+    void split_returnsEmptyMap_whenConfigFileIsEmpty() throws IOException {
+        // Create an empty config file
+        var tempFile = tempDir.resolve("empty_config.json");
+        try (var writer = new PrintWriter(tempFile.toFile())) {
+            writer.println("{}");
+        }
+
+        basketSplitter = new BasketSplitter(tempFile.toString());
+
+        List<String> items = Arrays.asList("item1", "item2", "item3");
+
+        assertThrows(InvalidItemException.class, () -> basketSplitter.split(items));
     }
 }

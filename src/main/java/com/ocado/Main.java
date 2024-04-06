@@ -9,7 +9,7 @@ public class Main {
         try {
             var path = "src\\main\\resources\\config.json";
             BasketSplitter splitter = new BasketSplitter(path);
-            var result = splitter.split(List.of("xd", "Fond - Chocolate", "Chocolate - Unsweetened", "Nut - Almond, Blanched, Whole", "Haggis", "Mushroom - Porcini Frozen", "Cake - Miini Cheesecake Cherry", "Sauce - Mint", "Longan", "Bag Clear 10 Lb", "Nantucket - Pomegranate Pear", "Puree - Strawberry", "Numi - Assorted Teas", "Apples - Spartan", "Garlic - Peeled", "Cabbage - Nappa", "Bagel - Whole White Sesame", "Tea - Apple Green Tea"));
+            var result = splitter.split(List.of("Cocoa Butter", "Tart - Raisin And Pecan", "Table Cloth 54x72 White", "Flower - Daisies", "Fond - Chocolate", "Cookies - Englishbay Wht"));
             System.out.println(result);
             System.out.println(result.size());
         } catch (Exception e) {
