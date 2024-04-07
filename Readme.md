@@ -64,6 +64,20 @@ After determining the smallest number of deliveries, the next step is to find th
 For this I used a greedy algorithm that prioritizes the delivery that appears in the most items.
 Then we assign the items to that delivery and repeat the process until all items are assigned.
 
+## Installation
+Project is built using Gradle. To build the project, run the following command in the project root directory:
+```shell
+./gradlew build
+```
+Project uses java 17.
+
+### Used libraries
+- JUnit 5 for testing
+- AssertJ also for testing
+- Google-OR tools for linear programming
+- lombok for boilerplate code reduction
+- json for parsing json files
+
 ## Notes
 - At first, I tried using only a greedy approach to solve the problem, but it was not optimal. The greedy approach does not guarantee the smallest number of deliveries. But it worked really fast.
 The test that broke the greedy is included in `BasketSplitterTest.split_returnsCorrectDeliveryOptions_forGivenItems` test.
