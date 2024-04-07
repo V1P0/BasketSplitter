@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -70,7 +72,20 @@ class BasketSplitterTest {
 
     @Test
     void split_handlesLargeInputAndConfigWithRandomDeliveryOptions() {
-        // Generate large config
+        var tempFile = generateLargeConfig();
+
+        // Generate large input list
+        List<String> items = IntStream.range(0, 100)
+                              .mapToObj(i -> "item" + i)
+                              .collect(Collectors.toList());
+
+
+        basketSplitter = new BasketSplitter(tempFile.toString());
+
+        assertDoesNotThrow(() -> basketSplitter.split(items));
+    }
+
+    private Path generateLargeConfig() {
         var tempFile = tempDir.resolve("large_config.json");
         try (var writer = new PrintWriter(tempFile.toFile())) {
             StringBuilder sb = new StringBuilder();
@@ -94,18 +109,7 @@ class BasketSplitterTest {
         } catch (IOException e) {
             fail("Failed to create large config file", e);
         }
-
-        // Generate large input list
-        List<String> items = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            items.add("item" + i);
-        }
-
-
-        basketSplitter = new BasketSplitter(tempFile.toString());
-
-        // Execute and assert no exceptions are thrown
-        assertDoesNotThrow(() -> basketSplitter.split(items));
+        return tempFile;
     }
 
     @Test
